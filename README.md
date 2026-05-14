@@ -86,7 +86,7 @@ Current interface includes:
 **AWS86**
 
 GitHub:
-[AWS86 GitHub](https://github.com/yourusername?utm_source=chatgpt.com)
+[AWS86 GitHub](https://github.com/wahaboni)
 
 ---
 
