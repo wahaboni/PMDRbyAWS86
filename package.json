@@ -1,0 +1,33 @@
+{
+  "name": "pomodoro-timer",
+  "version": "1.0.0",
+  "description": "A premium Pomodoro timer application",
+  "main": "main.js",
+  "author": "AWS86",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.aws86.pomodoro",
+    "productName": "AWS86 Pomodoro",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^42.0.1",
+    "electron-builder": "^26.8.1"
+  }
+}

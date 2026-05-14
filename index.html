@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Pomodoro</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="app-container">
+    <div class="title-bar">
+      <div class="brand">
+        <img src="assets/logo.png" alt="Pomodoro Logo" class="header-logo" draggable="false">
+        <div class="brand-text">
+          <span class="brand-name">PMDR</span>
+          <span class="brand-sub">by aws86</span>
+        </div>
+      </div>
+      <div class="window-controls">
+        <div class="window-control control-mini" id="mini-mode-btn" title="Mini Mode">
+          <i class="fas fa-compress-alt"></i>
+        </div>
+        <div class="window-control control-minimize" id="minimize-btn" title="Minimize"></div>
+        <div class="window-control control-close" id="close-btn" title="Close"></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="mode-selector">
+        <button class="mode-btn active" data-mode="work">Kerja</button>
+        <button class="mode-btn" data-mode="short">Istirahat Pendek</button>
+        <button class="mode-btn" data-mode="long">Istirahat Panjang</button>
+      </div>
+
+      <div class="session-wrapper">
+        <div class="session-counter" id="session-counter"></div>
+      </div>
+
+      <div class="task-container">
+        <input type="text" id="task-input" placeholder="Apa yang ingin Anda kerjakan?" maxlength="50">
+      </div>
+
+      <div class="timer-circle">
+        <svg class="circle-svg" viewBox="0 0 200 200">
+          <circle class="circle-bg" cx="100" cy="100" r="85"></circle>
+          <circle class="circle-progress" cx="100" cy="100" r="85"></circle>
+        </svg>
+        <div class="timer-display" id="timer" contenteditable="true">25:00</div>
+      </div>
+
+      <div class="controls">
+        <button class="btn-secondary" id="history-btn">
+          <i class="fas fa-list-ul"></i>
+        </button>
+        <button class="btn-main" id="start-pause-btn" title="Play">
+          <i class="fas fa-play" id="play-pause-icon"></i>
+        </button>
+        <button class="btn-secondary" id="settings-btn" title="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mini Mode Bottom Bar (outside .content, sibling to it) -->
+    <div class="mini-bottom-bar">
+      <!-- Timer + Play button row -->
+      <div class="mini-top-row">
+        <div class="mini-timer-group">
+          <!-- Timer text injected by JS -->
+          <span class="mini-timer-clone" id="mini-timer-clone">25:00</span>
+        </div>
+        <div class="mini-right-group">
+          <button class="btn-main mini-play-btn" id="mini-play-btn">
+            <i class="fas fa-play" id="mini-play-icon"></i>
+          </button>
+          <div class="mini-controls">
+            <div class="window-control control-mini" id="mini-mode-btn-2" title="Restore">
+              <i class="fas fa-expand-alt"></i>
+            </div>
+            <div class="window-control control-minimize" id="minimize-btn-2" title="Minimize"></div>
+            <div class="window-control control-close" id="close-btn-2" title="Close"></div>
+          </div>
+        </div>
+      </div>
+      <!-- Now Focusing row -->
+      <div class="mini-task-display" id="mini-task-display">
+        <span class="mini-task-label">SEDANG FOKUS</span>
+        <span class="mini-task-text" id="mini-task-text">—</span>
+      </div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="panel" id="settings-panel">
+      <div class="panel-header">
+        <h3>Pengaturan</h3>
+        <i class="fas fa-times close-panel" id="close-settings"></i>
+      </div>
+      <div class="panel-content">
+        <div class="setting-item">
+          <label>Tema Aplikasi</label>
+          <div class="theme-selector">
+            <div class="theme-swatch swatch-sunset active" data-theme="theme-sunset"></div>
+            <div class="theme-swatch swatch-ocean" data-theme="theme-ocean"></div>
+            <div class="theme-swatch swatch-midnight" data-theme="theme-midnight"></div>
+            <div class="theme-swatch swatch-forest" data-theme="theme-forest"></div>
+            <div class="theme-swatch swatch-purple" data-theme="theme-purple"></div>
+            <div class="theme-swatch swatch-gold" data-theme="theme-gold"></div>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>Suara Alarm</label>
+          <div class="sound-selector">
+            <select id="alarm-sound-select">
+              <option value="assets/notif.wav">Default Notif</option>
+              <option value="assets/notif2.wav">Notif 2</option>
+              <option value="assets/notif3.wav">Notif 3</option>
+              <option value="assets/notif4.wav">Notif 4</option>
+            </select>
+            <button class="btn-secondary test-btn" id="test-sound-btn">
+              <i class="fas fa-play"></i>
+            </button>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>Selalu di Atas</label>
+          <div class="switch-container">
+            <input type="checkbox" id="always-on-top-toggle">
+            <label for="always-on-top-toggle" class="switch"></label>
+          </div>
+        </div>
+        <div class="setting-item">
+          <label>Durasi Kerja (mnt)</label>
+          <input type="number" id="work-time" value="25">
+        </div>
+        <div class="setting-item">
+          <label>Istirahat Pendek (mnt)</label>
+          <input type="number" id="short-time" value="5">
+        </div>
+        <div class="setting-item">
+          <label>Istirahat Panjang (mnt)</label>
+          <input type="number" id="long-time" value="15">
+        </div>
+        <div class="setting-item">
+          <label>Sesi hingga Istirahat Panjang</label>
+          <input type="number" id="sessions-limit" value="4">
+        </div>
+        <div class="setting-item">
+          <label>Reset Siklus Pomodoro</label>
+          <button class="btn-secondary" id="reset-session-btn" style="width: auto; padding: 8px 15px; font-size: 0.8rem; border-radius: 0;">
+            <i class="fas fa-redo"></i> Reset Sesi
+          </button>
+        </div>
+
+        <div class="about-section">
+          <div class="divider"></div>
+          <p class="about-text">Pengatur Waktu Pomodoro Premium untuk produktivitas maksimal.</p>
+          <div class="copyright">
+            &copy; 2026 <span>AWS86 - Yours IT Solution</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Panel -->
+    <div class="panel" id="history-panel">
+      <div class="panel-header">
+        <h3>Riwayat</h3>
+        <div class="header-actions">
+          <i class="fas fa-trash-alt" id="clear-history" title="Hapus Semua"></i>
+          <i class="fas fa-times close-panel" id="close-history"></i>
+        </div>
+      </div>
+      <div class="panel-content" id="history-list">
+        <!-- History items will be added here -->
+      </div>
+    </div>
+
+    <!-- Alarm Modal -->
+    <div class="panel" id="alarm-panel">
+      <div class="panel-content alarm-content">
+        <div class="alarm-icon">
+          <i class="fas fa-bell" id="alarm-icon-img"></i>
+        </div>
+        <h2>Waktu Habis!</h2>
+        <p id="alarm-msg">Sesi Anda telah selesai.</p>
+        <button class="btn-main stop-alarm-btn" id="stop-alarm">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+
+</html>
